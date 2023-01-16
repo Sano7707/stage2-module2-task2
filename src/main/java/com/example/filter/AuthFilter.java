@@ -15,12 +15,15 @@ import java.io.IOException;
 public class AuthFilter extends HttpFilter {
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException {
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpSession session = req.getSession();
         HttpServletResponse resp = (HttpServletResponse) response;
         if(null == session.getAttribute("user")){
             resp.sendRedirect(req.getContextPath() + "/login.jsp");
+        }
+        else{
+            chain.doFilter(request,response);
         }
     }
     //write your code here!

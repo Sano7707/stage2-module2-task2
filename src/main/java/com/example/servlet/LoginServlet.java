@@ -1,51 +1,51 @@
 package com.example.servlet;
 
 
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletConfig;
+import com.example.Users;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
-    //write your code here!
 
+    private final Users usersRepo = Users.getInstance();
 
     @Override
-    public void init(ServletConfig config) throws ServletException {
-        super.init(config);
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+            throws IOException {
+
+        Object user = req.getSession().getAttribute("user");
+
+        if (user == null) {
+            resp.sendRedirect("/login.jsp");
+        } else {
+            resp.sendRedirect("/user/hello.jsp");
+        }
+
     }
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        HttpSession session = req.getSession();
-        if(null == session.getAttribute("user")){
-            resp.sendRedirect(req.getContextPath() + "/login.jsp");
-        }
-        else {
-            resp.sendRedirect(req.getContextPath() + "/user/hello.jsp");
-        }
-    }
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
 
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        HttpSession session = req.getSession();
-        String password = req.getParameter("password");
         String login = req.getParameter("login");
-        if((login.equals("admin") || login.equals("user")) && !password.equals("")){
-            session.setAttribute("user","user");
-            resp.sendRedirect(req.getContextPath() + "/user/hello.jsp");
+        String password = req.getParameter("password");
 
+        boolean rightLogin = usersRepo.getUsers().contains(login);
+        boolean rightPassword = password != null && !password.trim().isEmpty();
+
+        if (rightLogin && rightPassword) {
+            req.getSession().setAttribute("user", login);
+            resp.sendRedirect("/user/hello.jsp");
+        } else {
+            req.getRequestDispatcher("/login.jsp").forward(req, resp);
         }
-        else {
-            String nextJSP = "/login.jsp";
-            RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
-            dispatcher.forward(req,resp);
-        }
+
     }
+
 }
