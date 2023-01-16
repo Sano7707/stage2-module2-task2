@@ -2,6 +2,7 @@ package com.example.servlet;
 
 
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -14,6 +15,11 @@ import java.io.IOException;
 public class LoginServlet extends HttpServlet {
     //write your code here!
 
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+    }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
