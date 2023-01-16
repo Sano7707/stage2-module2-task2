@@ -9,7 +9,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 @WebFilter(
-        urlPatterns = "/users/*"
+        urlPatterns = "/user/*"
 )
 public class AuthFilter implements Filter {
     @Override
