@@ -1,8 +1,6 @@
 package com.example.servlet;
 
 
-import com.example.Users;
-
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,23 +16,13 @@ public class LoginServlet extends HttpServlet {
 
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         HttpSession session = req.getSession();
         if(null == session.getAttribute("user")){
-            RequestDispatcher requestDispatcher = req.getRequestDispatcher("/login.jsp");
-            try {
-                requestDispatcher.forward(req, resp);
-            } catch (ServletException | IOException e) {
-                e.printStackTrace();
-            }
+            resp.sendRedirect(req.getContextPath() + "/login.jsp");
         }
         else {
-            RequestDispatcher requestDispatcher = req.getRequestDispatcher("/user/hello.jsp");
-            try {
-                requestDispatcher.forward(req, resp);
-            } catch (ServletException | IOException e) {
-                e.printStackTrace();
-            }
+            resp.sendRedirect(req.getContextPath() + "/user/hello.jsp");
         }
     }
 
